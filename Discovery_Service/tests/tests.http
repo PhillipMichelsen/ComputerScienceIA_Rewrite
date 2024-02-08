@@ -1,0 +1,15 @@
+###
+GRPC 127.0.0.1:8000/discovery_service.Registration/RegisterService
+
+{
+  "service_type": "File",
+  "service_address": "127.0.0.1",
+  "service_port": "8001"
+}
+
+###
+GRPC 127.0.0.1:8000/discovery_service.Retrieval/GetService
+
+{
+  "service_type": "File"
+}
