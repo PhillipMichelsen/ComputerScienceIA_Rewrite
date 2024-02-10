@@ -1,0 +1,4 @@
+grpcio
+PyYAML
+redis
+protobuf

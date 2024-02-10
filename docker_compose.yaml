@@ -1,0 +1,17 @@
+#file: noinspection SpellCheckingInspection
+version: '3.8'
+
+services:
+  orchestration-service-core:
+    build: ./Orchestration_Service
+    container_name: orchestration-service
+    ports:
+      - "50051:50051"
+    depends_on:
+      - redis
+
+  redis:
+    image: redis
+    container_name: redis
+    ports:
+      - "6379:6379"

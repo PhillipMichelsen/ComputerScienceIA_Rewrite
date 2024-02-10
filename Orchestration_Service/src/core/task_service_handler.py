@@ -1,9 +1,54 @@
 from src.utils.dependency_manager import DependencyManager
+from src.utils.redis_client import ManagerRedisClient, WorkerRedisClient
+from src.utils.grpc_service_manager import GrpcServiceManager
 
 
-def task_completed(task_id: str, job_id: str, dependency_manager: DependencyManager):
-    pass
+def task_completed(task_id: str, dependency_manager: DependencyManager):
+    manager_redis_client: ManagerRedisClient = dependency_manager.get_dependency('manager_redis_client')
+    worker_redis_client: WorkerRedisClient = dependency_manager.get_dependency('worker_redis_client')
+    grpc_service_manager: GrpcServiceManager = dependency_manager.get_dependency('grpc_service_manager')
+
+    job_id = manager_redis_client.get_task_metadata(task_id, ['job_id'])[0]
+    next_task_id = manager_redis_client.dequeue_task_chain(job_id)
+
+    if next_task_id:
+        method_signature = manager_redis_client.get_task_metadata(next_task_id, ['method_signature'])[0]
+        service_name, method_name = method_signature.split('.')
+
+        request_class, grpc_method = grpc_service_manager.get_service_components(service_name, method_name)
+
+        request = request_class(
+            task_id=next_task_id,
+            job_id=job_id
+        )
+
+        response = grpc_method(request)
+
+        if response.success:
+            pass
+
+    else:
+        task_chain = manager_redis_client.get_job_metadata(job_id, ['task_chain'])[0]
+        task_chain = task_chain.split(',')
+
+        for task_id in task_chain:
+            manager_redis_client.delete_task_metadata(task_id)
+
+        manager_redis_client.delete_job_metadata(job_id)
+        worker_redis_client.delete_job_data(job_id)
 
 
-def task_error(task_id: str, job_id: str, dependency_manager: DependencyManager):
-    pass
+def task_error(task_id: str, error_message: str, dependency_manager: DependencyManager):
+    manager_redis_client: ManagerRedisClient = dependency_manager.get_dependency('manager_redis_client')
+    worker_redis_client: WorkerRedisClient = dependency_manager.get_dependency('worker_redis_client')
+
+    job_id = manager_redis_client.get_task_metadata(task_id, ['job_id'])[0]
+    task_chain = manager_redis_client.get_job_metadata(job_id, ['task_chain'])[0]
+    task_chain = task_chain.split(',')
+
+    for task_id in task_chain:
+        manager_redis_client.delete_task_metadata(task_id)
+
+    manager_redis_client.delete_job_metadata(job_id)
+    worker_redis_client.delete_job_data(job_id)
+    print(f'Error: {error_message}, Job ID: {job_id}, Task ID: {task_id}... Job terminated gracefully.')

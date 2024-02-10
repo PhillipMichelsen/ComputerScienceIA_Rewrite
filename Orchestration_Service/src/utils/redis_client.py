@@ -1,9 +1,18 @@
 import redis
+import json
+import logging
 
 
 class BaseRedisClient:
-    def __init__(self, host='localhost', port=6379, db=0):
+    def __init__(self, host='redis', port=6379, db=0):
         self.client = redis.Redis(host=host, port=port, db=db)
+
+        try:
+            self.client.ping()
+            logging.debug(f"Connected to {host}:{port} on db {db}!")
+        except redis.exceptions.ConnectionError:
+            logging.error(f"Could not connect to {host}:{port} on db {db} :(")
+            raise Exception("Redis server not available :(")
 
 
 class ManagerRedisClient(BaseRedisClient):
@@ -59,3 +68,9 @@ class WorkerRedisClient(BaseRedisClient):
 
     def delete_job_data(self, job_id: str):
         self.client.delete(f"{job_id}:JobData")
+
+    def publish_service_notification(self, service_id: str, notification: dict):
+        notification_json = json.dumps(notification)
+        notification_bytes = notification_json.encode('utf-8')
+
+        self.client.publish(f"{service_id}:ServiceNotification", notification_bytes)

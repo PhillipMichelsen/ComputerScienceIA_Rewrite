@@ -15,7 +15,7 @@ service TaskService {
 
 message CreateJobRequest {
     string job_name = 1;
-    string notification_endpoint = 2;
+    string service_id = 2;
     map<string, string> initial_job_data = 3;
 }
 
@@ -26,22 +26,18 @@ message AddTaskToJobRequest {
 
 message NotifyJobRequest {
     string task_id = 1;
-    string job_id = 2;
-    map<string, string> notification = 3;
+    map<string, string> notification = 2;
 }
 
 message TaskCompletedRequest {
     string task_id = 1;
-    string job_id = 2;
 }
 
 message TaskErrorRequest {
     string task_id = 1;
-    string job_id = 2;
-    string error_message = 3;
+    string error_message = 2;
 }
 
 message Acknowledgement {
     bool success = 1;
 }
-

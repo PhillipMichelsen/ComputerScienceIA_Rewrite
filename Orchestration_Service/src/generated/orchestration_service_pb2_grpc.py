@@ -2,7 +2,7 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-import orchestration_service_pb2 as orchestration__service__pb2
+import src.generated.orchestration_service_pb2 as orchestration__service__pb2
 
 
 class JobServiceStub(object):
