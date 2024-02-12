@@ -1,13 +1,13 @@
 import grpc
 import threading
 
-from src.core.task_service_handler import task_completed, task_error
+from src.core.task_sub_service_handler import task_completed, task_error
 from src.generated import orchestration_service_pb2, orchestration_service_pb2_grpc
 from src.utils.dependency_manager import DependencyManager
 import logging
 
 
-class TaskService(orchestration_service_pb2_grpc.TaskServiceServicer):
+class TaskSubService(orchestration_service_pb2_grpc.TaskSubServiceServicer):
     def __init__(self, dependency_manager: DependencyManager):
         self.dependency_manager: DependencyManager = dependency_manager
 
@@ -26,9 +26,9 @@ class TaskService(orchestration_service_pb2_grpc.TaskServiceServicer):
             context.set_code(grpc.StatusCode.INTERNAL)
             context.set_details(str(e))
             logging.error(f"Error processing task_completed: {e}")
-            return orchestration_service_pb2.Acknowledgement(success=False)
+            return orchestration_service_pb2.OrchestrationServiceAcknowledgement(success=False)
 
-        return orchestration_service_pb2.Acknowledgement(success=True)
+        return orchestration_service_pb2.OrchestrationServiceAcknowledgement(success=True)
 
     def TaskError(self, request, context):
         logging.debug(f"Received a task_error request: {request}")
@@ -46,6 +46,6 @@ class TaskService(orchestration_service_pb2_grpc.TaskServiceServicer):
             context.set_code(grpc.StatusCode.INTERNAL)
             context.set_details(str(e))
             logging.error(f"Error processing task_error: {e}")
-            return orchestration_service_pb2.Acknowledgement(success=False)
+            return orchestration_service_pb2.OrchestrationServiceAcknowledgement(success=False)
 
-        return orchestration_service_pb2.Acknowledgement(success=True)
+        return orchestration_service_pb2.OrchestrationServiceAcknowledgement(success=True)

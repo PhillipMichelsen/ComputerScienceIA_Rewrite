@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package orchestration_service;
+
+service JobSubService {
+    rpc CreateJob(CreateJobRequest) returns (OrchestrationServiceAcknowledgement) {}
+    rpc AddTaskToJob(AddTaskToJobRequest) returns (OrchestrationServiceAcknowledgement) {}
+    rpc NotifyJob(NotifyJobRequest) returns (OrchestrationServiceAcknowledgement) {}
+}
+
+service TaskSubService {
+    rpc TaskCompleted(TaskCompletedRequest) returns (OrchestrationServiceAcknowledgement) {}
+    rpc TaskError(TaskErrorRequest) returns (OrchestrationServiceAcknowledgement) {}
+}
+
+message CreateJobRequest {
+    string job_name = 1;
+    string service_id = 2;
+    map<string, string> initial_job_data = 3;
+}
+
+message AddTaskToJobRequest {
+    string job_id = 1;
+    string task_name = 2;
+}
+
+message NotifyJobRequest {
+    string task_id = 1;
+    map<string, string> notification = 2;
+}
+
+message TaskCompletedRequest {
+    string task_id = 1;
+}
+
+message TaskErrorRequest {
+    string task_id = 1;
+    string error_message = 2;
+}
+
+message OrchestrationServiceAcknowledgement {
+    bool success = 1;
+}

@@ -5,10 +5,10 @@ import logging
 from src.utils.dependency_manager import DependencyManager
 
 from src.generated import orchestration_service_pb2, orchestration_service_pb2_grpc
-from src.core.job_service_handler import create_job, add_task_to_job, notify_job
+from src.core.job_sub_service_handler import create_job, add_task_to_job, notify_job
 
 
-class JobService(orchestration_service_pb2_grpc.JobServiceServicer):
+class JobSubService(orchestration_service_pb2_grpc.JobSubServiceServicer):
     def __init__(self, dependency_manager: DependencyManager):
         self.dependency_manager: DependencyManager = dependency_manager
 
@@ -29,9 +29,9 @@ class JobService(orchestration_service_pb2_grpc.JobServiceServicer):
             context.set_code(grpc.StatusCode.INTERNAL)
             context.set_details(str(e))
             logging.error(f"Error processing create_job: {e}")
-            return orchestration_service_pb2.Acknowledgement(success=False)
+            return orchestration_service_pb2.OrchestrationServiceAcknowledgement(success=False)
 
-        return orchestration_service_pb2.Acknowledgement(success=True)
+        return orchestration_service_pb2.OrchestrationServiceAcknowledgement(success=True)
 
     def AddTaskToJob(self, request, context):
         logging.debug(f"Received an add_task_to_job request: {request}")
@@ -49,9 +49,9 @@ class JobService(orchestration_service_pb2_grpc.JobServiceServicer):
             context.set_code(grpc.StatusCode.INTERNAL)
             context.set_details(str(e))
             logging.error(f"Error processing add_task_to_job: {e}")
-            return orchestration_service_pb2.Acknowledgement(success=False)
+            return orchestration_service_pb2.OrchestrationServiceAcknowledgement(success=False)
 
-        return orchestration_service_pb2.Acknowledgement(success=True)
+        return orchestration_service_pb2.OrchestrationServiceAcknowledgement(success=True)
 
     def NotifyJob(self, request, context):
         logging.debug(f"Received a notify_job request: {request}")
@@ -69,6 +69,6 @@ class JobService(orchestration_service_pb2_grpc.JobServiceServicer):
             context.set_code(grpc.StatusCode.INTERNAL)
             context.set_details(str(e))
             logging.error(f"Error processing notify_job: {e}")
-            return orchestration_service_pb2.Acknowledgement(success=False)
+            return orchestration_service_pb2.OrchestrationServiceAcknowledgement(success=False)
 
-        return orchestration_service_pb2.Acknowledgement(success=True)
+        return orchestration_service_pb2.OrchestrationServiceAcknowledgement(success=True)

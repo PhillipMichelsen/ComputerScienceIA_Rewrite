@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package file_service;
+
+service PresignedURLSubService {
+    rpc GetPresignedUploadURL(FileServiceTaskRequest) returns (FileServiceAcknowledgement) {}
+    rpc GetPresignedDownloadURL(FileServiceTaskRequest) returns (FileServiceAcknowledgement){}
+}
+
+service FileEmbeddingSubService {
+    rpc RegisterFile(FileServiceTaskRequest) returns (FileServiceAcknowledgement) {}
+    rpc GetFilesInfo(FileServiceTaskRequest) returns (FileServiceAcknowledgement) {}
+    rpc ProcessFile(FileServiceTaskRequest) returns (FileServiceAcknowledgement) {}
+    rpc RetrieveNearestNParagraphs(FileServiceTaskRequest) returns (FileServiceAcknowledgement) {}
+}
+
+message FileServiceTaskRequest {
+    string task_id = 1;
+    string job_id = 2;
+}
+
+message FileServiceAcknowledgement {
+    bool success = 1;
+}

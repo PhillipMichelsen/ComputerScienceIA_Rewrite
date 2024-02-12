@@ -39,7 +39,6 @@ def create_job(job_name: str, service_id: str, initial_job_data: dict, dependenc
 
 def add_task_to_job(job_id: str, task_name: str, dependency_manager: DependencyManager):
     manager_redis_client: ManagerRedisClient = dependency_manager.get_dependency('manager_redis_client')
-    worker_redis_client: WorkerRedisClient = dependency_manager.get_dependency('worker_redis_client')
     tasks_yaml: dict = dependency_manager.get_dependency('tasks_yaml')
 
     task_id = str(uuid4())

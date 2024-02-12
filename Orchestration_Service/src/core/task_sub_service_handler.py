@@ -1,21 +1,28 @@
 from src.utils.dependency_manager import DependencyManager
 from src.utils.redis_client import ManagerRedisClient, WorkerRedisClient
 from src.utils.grpc_service_manager import GrpcServiceManager
+import logging
 
 
 def task_completed(task_id: str, dependency_manager: DependencyManager):
     manager_redis_client: ManagerRedisClient = dependency_manager.get_dependency('manager_redis_client')
     worker_redis_client: WorkerRedisClient = dependency_manager.get_dependency('worker_redis_client')
     grpc_service_manager: GrpcServiceManager = dependency_manager.get_dependency('grpc_service_manager')
+    tasks_yaml: dict = dependency_manager.get_dependency('tasks_yaml')
 
     job_id = manager_redis_client.get_task_metadata(task_id, ['job_id'])[0]
     next_task_id = manager_redis_client.dequeue_task_chain(job_id)
 
     if next_task_id:
-        method_signature = manager_redis_client.get_task_metadata(next_task_id, ['method_signature'])[0]
-        service_name, method_name = method_signature.split('.')
+        next_task_name = manager_redis_client.get_task_metadata(next_task_id, ['task_name'])[0]
+        method_signature = tasks_yaml.get(next_task_name, {}).get('signature')
+        service_name, sub_service_name, method_name = method_signature.split('.')
 
-        request_class, grpc_method = grpc_service_manager.get_service_components(service_name, method_name)
+        request_class, grpc_method = grpc_service_manager.get_service_components(
+            service_name,
+            sub_service_name,
+            method_name
+        )
 
         request = request_class(
             task_id=next_task_id,
@@ -51,4 +58,4 @@ def task_error(task_id: str, error_message: str, dependency_manager: DependencyM
 
     manager_redis_client.delete_job_metadata(job_id)
     worker_redis_client.delete_job_data(job_id)
-    print(f'Error: {error_message}, Job ID: {job_id}, Task ID: {task_id}... Job terminated gracefully.')
+    logging.error(f'{error_message}, Job ID: {job_id}, Task ID: {task_id}... Job terminated gracefully.')

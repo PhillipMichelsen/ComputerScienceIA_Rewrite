@@ -1,0 +1,2 @@
+GetPresignedUploadURL:
+  signature: "FileService.PresignedUrlSubService.GetPresignedUploadURL"

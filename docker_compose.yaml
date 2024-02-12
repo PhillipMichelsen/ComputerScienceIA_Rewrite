@@ -10,8 +10,25 @@ services:
     depends_on:
       - redis
 
+  file-service-core:
+    build: ./File_Service
+    container_name: file-service
+    ports:
+      - "50052:50051"
+    depends_on:
+      - redis
+      - minio
+
   redis:
     image: redis
     container_name: redis
     ports:
       - "6379:6379"
+
+  minio:
+    image: minio/minio
+    container_name: minio-service
+    command: server --console-address ":9001" --address ":9000" /data
+    ports:
+      - "9000:9000"
+      - "9001:9001"
