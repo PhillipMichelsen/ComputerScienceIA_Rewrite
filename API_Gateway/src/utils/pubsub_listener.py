@@ -3,41 +3,37 @@ import logging
 import threading
 from queue import Queue
 
+import redis
+
 
 class RedisPubSubListener:
-    def __init__(self, redis_client):
-        self.redis_client = redis_client
+    def __init__(self, redis_client, service_id):
+        self.redis_client: redis.Redis = redis_client
         self.listeners = {}
         self.pubsub = self.redis_client.pubsub()
+
+        self.pubsub.subscribe(f"{service_id}:ServiceRequestNotification")
         self.thread = threading.Thread(target=self.listen_to_redis, daemon=True)
         self.thread.start()
 
     def add_listener(self, request_id):
-        request_id_queue = f"{request_id}:RequestNotification"
-        if request_id_queue not in self.listeners:
-            self.listeners[request_id_queue] = Queue()
-            self.pubsub.subscribe(request_id_queue)
-            logging.debug(f"Subscribed to channel: {request_id_queue}")
+        if request_id not in self.listeners:
+            self.listeners[request_id] = Queue()
+            logging.info(f"Listening for: {request_id}")
 
     def remove_listener(self, request_id):
-        request_id_queue = f"{request_id}:RequestNotification"
-        if request_id_queue in self.listeners:
-            del self.listeners[request_id_queue]
-            self.pubsub.unsubscribe(f"{request_id_queue}:RequestNotification")
-            logging.debug(f"Unsubscribed from channel: {request_id_queue}")
+        if request_id in self.listeners:
+            del self.listeners[request_id]
+            logging.info(f"Removed listener for: {request_id}")
 
     def get_queue(self, request_id):
-        return self.listeners.get(f"{request_id}:RequestNotification")
+        return self.listeners.get(request_id)
 
     def listen_to_redis(self):
-        while True:
-            message = self.pubsub.get_message()
-            if message and message['type'] == 'message':
-                channel = message['channel']
-                if channel in self.listeners:
-                    try:
-                        data = json.loads(message['data'])
-                        self.listeners[channel].put(data)
-                        logging.debug(f"Message received on {channel}: {data}")
-                    except json.JSONDecodeError as e:
-                        logging.error(f"Error decoding message: {e}")
+        for message in self.pubsub.listen():
+            logging.info(message)
+            if message['type'] == 'message':
+                data = json.loads(message['data'])
+                if data['request_id'] in self.listeners:
+                    self.listeners[data['request_id']].put(data)
+                    logging.debug(f"Placed message in queue for request_id: {data['request_id']}")

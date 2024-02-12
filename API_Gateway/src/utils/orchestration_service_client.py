@@ -18,8 +18,8 @@ class OrchestrationServiceClient:
         self.job_stub = JobSubServiceStub(self.channel)
         self.task_stub = TaskSubServiceStub(self.channel)
 
-    def create_job(self, job_name, request_id, initial_job_data):
-        request = CreateJobRequest(job_name=job_name, request_id=request_id, initial_job_data=initial_job_data)
+    def create_job(self, job_name, service_id, request_id, initial_job_data):
+        request = CreateJobRequest(job_name=job_name, service_id=service_id, request_id=request_id, initial_job_data=initial_job_data)
         logging.debug(f"Sending create job request, job: {job_name}, request_id: {request_id}")
         return self.job_stub.CreateJob(request)
 

@@ -18,6 +18,7 @@ class JobSubService(orchestration_service_pb2_grpc.JobSubServiceServicer):
                 target=create_job,
                 args=(
                     request.job_name,
+                    request.service_id,
                     request.request_id,
                     request.initial_job_data,
                     self.dependency_manager

@@ -17,6 +17,7 @@ def get_presigned_upload_url(file_name: str, dependency_manager: DependencyManag
     orchestration_service_client: OrchestrationServiceClient = dependency_manager.get_dependency(
         'orchestration_service_client')
     redis_pubsub_listener: RedisPubSubListener = dependency_manager.get_dependency('pubsub_listener')
+    service_id = dependency_manager.get_dependency('service_id')
 
     request_id = str(uuid4())
     logging.info(f"New get_presigned_upload_url request, request_id: {request_id}")
@@ -26,6 +27,7 @@ def get_presigned_upload_url(file_name: str, dependency_manager: DependencyManag
     try:
         orchestration_service_client.create_job(
             job_name='GetPresignedUploadURL',
+            service_id=service_id,
             request_id=request_id,
             initial_job_data={'file_name': file_name}
         )
