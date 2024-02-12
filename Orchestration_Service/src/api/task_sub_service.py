@@ -1,10 +1,11 @@
-import grpc
+import logging
 import threading
+
+import grpc
 
 from src.core.task_sub_service_handler import task_completed, task_error
 from src.generated import orchestration_service_pb2, orchestration_service_pb2_grpc
 from src.utils.dependency_manager import DependencyManager
-import logging
 
 
 class TaskSubService(orchestration_service_pb2_grpc.TaskSubServiceServicer):
@@ -12,7 +13,6 @@ class TaskSubService(orchestration_service_pb2_grpc.TaskSubServiceServicer):
         self.dependency_manager: DependencyManager = dependency_manager
 
     def TaskCompleted(self, request, context):
-        logging.debug(f"Received a task_completed request: {request}")
         try:
             thread = threading.Thread(
                 target=task_completed,
@@ -21,17 +21,16 @@ class TaskSubService(orchestration_service_pb2_grpc.TaskSubServiceServicer):
                     self.dependency_manager
                 ))
             thread.start()
-            logging.debug(f"Started task_completed successfully on thread {thread}")
+            logging.debug(f"Received a task_completed request and successfully started on thread {thread}")
         except Exception as e:
             context.set_code(grpc.StatusCode.INTERNAL)
             context.set_details(str(e))
-            logging.error(f"Error processing task_completed: {e}")
+            logging.error(f"Received a task_completed request but had error: {e}")
             return orchestration_service_pb2.OrchestrationServiceAcknowledgement(success=False)
 
         return orchestration_service_pb2.OrchestrationServiceAcknowledgement(success=True)
 
     def TaskError(self, request, context):
-        logging.debug(f"Received a task_error request: {request}")
         try:
             thread = threading.Thread(
                 target=task_error,
@@ -41,11 +40,11 @@ class TaskSubService(orchestration_service_pb2_grpc.TaskSubServiceServicer):
                     self.dependency_manager
                 ))
             thread.start()
-            logging.debug(f"Started task_error successfully on thread {thread}")
+            logging.debug(f"Received a task_error request and successfully started on thread {thread}")
         except Exception as e:
             context.set_code(grpc.StatusCode.INTERNAL)
             context.set_details(str(e))
-            logging.error(f"Error processing task_error: {e}")
+            logging.error(f"Received a task_error request but had error: {e}")
             return orchestration_service_pb2.OrchestrationServiceAcknowledgement(success=False)
 
         return orchestration_service_pb2.OrchestrationServiceAcknowledgement(success=True)

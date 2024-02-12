@@ -1,57 +1,48 @@
 import grpc
-from src.generated.file_service_pb2_grpc import PresignedURLSubServiceStub, FileEmbeddingSubServiceStub
-from src.generated.file_service_pb2 import FileServiceTaskRequest
+
+from src.generated import file_service_pb2, file_service_pb2_grpc
 
 
 class GrpcServiceManager:
     def __init__(self):
-        self.services = {
-            'FileService': {
-                'PresignedURLSubService': {
-                    'stub': PresignedURLSubServiceStub,
-                    'methods': {
-                        'GetPresignedUploadURL': FileServiceTaskRequest,
-                        'GetPresignedDownloadURL': FileServiceTaskRequest
-                    }
-                },
-                'FileEmbeddingSubService': {
-                    'stub': FileEmbeddingSubServiceStub,
-                    'methods': {
-                        'RegisterFile': FileServiceTaskRequest,
-                        'GetFilesInfo': FileServiceTaskRequest,
-                        'ProcessFile': FileServiceTaskRequest,
-                        'RetrieveNearestNParagraphs': FileServiceTaskRequest,
-                    }
-                }
-            }
+        self.channels = {
+            'FileService': grpc.insecure_channel('file-service:50052'),
         }
 
-        self.channels = {
-            'FileService': grpc.insecure_channel('file-service:50052')
+        self.service_info = {
+            'FileService': {
+                'stub_classes': {
+                    'PresignedURLSubService': file_service_pb2_grpc.PresignedURLSubServiceStub,
+                    'FileEmbeddingSubService': file_service_pb2_grpc.FileEmbeddingSubServiceStub,
+                },
+                'request_class': file_service_pb2.FileServiceTaskRequest,
+            },
         }
+
+        self.stubs_cache = {}
 
     def get_service_components(self, service_name, sub_service_name, method_name) -> tuple:
-        """
-        Provides the request class and callable for a given service and method.
+        if service_name not in self.service_info:
+            raise ValueError(f"Service '{service_name}' is not defined.")
 
-        :param service_name: The name of the service.
-        :param sub_service_name: The name of the sub-service.
-        :param method_name: The name of the method.
-        :return: A tuple of (request_class, grpc_method)
-        """
-        service = self.services.get(service_name, {})
-        sub_service = service.get(sub_service_name, {})
+        service_config = self.service_info[service_name]
 
-        stub_class = sub_service.get('stub')
-        request_class = sub_service.get('methods', {}).get(method_name)
+        if sub_service_name not in service_config['stub_classes']:
+            raise ValueError(f"Sub service '{sub_service_name}' is not defined in service '{service_name}'.")
 
-        if not stub_class or not request_class:
-            raise ValueError(f"Service/Method not found for {service_name}.{sub_service_name}.{method_name}")
+        stub_key = f"{service_name}_{sub_service_name}"
+        if stub_key not in self.stubs_cache:
+            stub_class = service_config['stub_classes'][sub_service_name]
+            self.stubs_cache[stub_key] = stub_class(self.channels[service_name])
 
-        stub = stub_class(self.channels[service_name])
-        grpc_method = getattr(stub, method_name, None)
+        stub = self.stubs_cache[stub_key]
 
-        if not grpc_method:
-            raise ValueError(f"Method {method_name} not found in service {service_name}")
+        try:
+            grpc_method = getattr(stub, method_name)
+        except AttributeError:
+            raise ValueError(
+                f"Method '{method_name}' not found in subservice '{sub_service_name}' of service '{service_name}'.")
 
-        return request_class, grpc_method
+        request_class = service_config['request_class']
+
+        return grpc_method, request_class

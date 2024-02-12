@@ -1,7 +1,8 @@
-from src.utils.dependency_manager import DependencyManager
-from src.utils.redis_client import ManagerRedisClient, WorkerRedisClient
-from src.utils.grpc_service_manager import GrpcServiceManager
 import logging
+
+from src.utils.dependency_manager import DependencyManager
+from src.utils.grpc_service_manager import GrpcServiceManager
+from src.utils.redis_client import ManagerRedisClient, WorkerRedisClient
 
 
 def task_completed(task_id: str, dependency_manager: DependencyManager):
@@ -18,7 +19,7 @@ def task_completed(task_id: str, dependency_manager: DependencyManager):
         method_signature = tasks_yaml.get(next_task_name, {}).get('signature')
         service_name, sub_service_name, method_name = method_signature.split('.')
 
-        request_class, grpc_method = grpc_service_manager.get_service_components(
+        grpc_method, request_class = grpc_service_manager.get_service_components(
             service_name,
             sub_service_name,
             method_name
@@ -34,6 +35,8 @@ def task_completed(task_id: str, dependency_manager: DependencyManager):
         if response.success:
             pass
 
+        logging.debug(f"Next task dispatched for job_id {job_id}... Task ID: {next_task_id}")
+
     else:
         task_chain = manager_redis_client.get_job_metadata(job_id, ['task_chain'])[0]
         task_chain = task_chain.split(',')
@@ -43,6 +46,8 @@ def task_completed(task_id: str, dependency_manager: DependencyManager):
 
         manager_redis_client.delete_job_metadata(job_id)
         worker_redis_client.delete_job_data(job_id)
+
+        logging.debug(f"Job ID: {job_id} completed successfully... Job terminated gracefully.")
 
 
 def task_error(task_id: str, error_message: str, dependency_manager: DependencyManager):

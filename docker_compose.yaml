@@ -2,7 +2,16 @@
 version: '3.8'
 
 services:
-  orchestration-service-core:
+  api-gateway:
+    build: ./API_Gateway
+    container_name: api-gateway
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+      - orchestration-service
+
+  orchestration-service:
     build: ./Orchestration_Service
     container_name: orchestration-service
     ports:
@@ -10,14 +19,15 @@ services:
     depends_on:
       - redis
 
-  file-service-core:
+  file-service:
     build: ./File_Service
     container_name: file-service
     ports:
-      - "50052:50051"
+      - "50052:50052"
     depends_on:
       - redis
       - minio
+      - orchestration-service
 
   redis:
     image: redis

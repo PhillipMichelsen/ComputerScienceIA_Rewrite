@@ -32,8 +32,8 @@ class WorkerRedisClient(BaseRedisClient):
     def delete_job_data(self, job_id: str):
         self.client.delete(f"{job_id}:JobData")
 
-    def publish_request_notification(self, request_id: str, notification: dict):
+    def publish_service_notification(self, service_id: str, notification: dict):
         notification_json = json.dumps(notification)
         notification_bytes = notification_json.encode('utf-8')
 
-        self.client.publish(f"{request_id}:RequestNotification", notification_bytes)
+        self.client.publish(f"{service_id}:ServiceNotification", notification_bytes)

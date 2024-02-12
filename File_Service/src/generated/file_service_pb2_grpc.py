@@ -15,15 +15,15 @@ class PresignedURLSubServiceStub(object):
             channel: A grpc.Channel.
         """
         self.GetPresignedUploadURL = channel.unary_unary(
-                '/file_service.PresignedURLSubService/GetPresignedUploadURL',
-                request_serializer=file__service__pb2.FileServiceTaskRequest.SerializeToString,
-                response_deserializer=file__service__pb2.FileServiceAcknowledgement.FromString,
-                )
+            '/file_service.PresignedURLSubService/GetPresignedUploadURL',
+            request_serializer=file__service__pb2.FileServiceTaskRequest.SerializeToString,
+            response_deserializer=file__service__pb2.FileServiceAcknowledgement.FromString,
+        )
         self.GetPresignedDownloadURL = channel.unary_unary(
-                '/file_service.PresignedURLSubService/GetPresignedDownloadURL',
-                request_serializer=file__service__pb2.FileServiceTaskRequest.SerializeToString,
-                response_deserializer=file__service__pb2.FileServiceAcknowledgement.FromString,
-                )
+            '/file_service.PresignedURLSubService/GetPresignedDownloadURL',
+            request_serializer=file__service__pb2.FileServiceTaskRequest.SerializeToString,
+            response_deserializer=file__service__pb2.FileServiceAcknowledgement.FromString,
+        )
 
 
 class PresignedURLSubServiceServicer(object):
@@ -44,59 +44,61 @@ class PresignedURLSubServiceServicer(object):
 
 def add_PresignedURLSubServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'GetPresignedUploadURL': grpc.unary_unary_rpc_method_handler(
-                    servicer.GetPresignedUploadURL,
-                    request_deserializer=file__service__pb2.FileServiceTaskRequest.FromString,
-                    response_serializer=file__service__pb2.FileServiceAcknowledgement.SerializeToString,
-            ),
-            'GetPresignedDownloadURL': grpc.unary_unary_rpc_method_handler(
-                    servicer.GetPresignedDownloadURL,
-                    request_deserializer=file__service__pb2.FileServiceTaskRequest.FromString,
-                    response_serializer=file__service__pb2.FileServiceAcknowledgement.SerializeToString,
-            ),
+        'GetPresignedUploadURL': grpc.unary_unary_rpc_method_handler(
+            servicer.GetPresignedUploadURL,
+            request_deserializer=file__service__pb2.FileServiceTaskRequest.FromString,
+            response_serializer=file__service__pb2.FileServiceAcknowledgement.SerializeToString,
+        ),
+        'GetPresignedDownloadURL': grpc.unary_unary_rpc_method_handler(
+            servicer.GetPresignedDownloadURL,
+            request_deserializer=file__service__pb2.FileServiceTaskRequest.FromString,
+            response_serializer=file__service__pb2.FileServiceAcknowledgement.SerializeToString,
+        ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'file_service.PresignedURLSubService', rpc_method_handlers)
+        'file_service.PresignedURLSubService', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
 
 
- # This class is part of an EXPERIMENTAL API.
+# This class is part of an EXPERIMENTAL API.
 class PresignedURLSubService(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
     def GetPresignedUploadURL(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/file_service.PresignedURLSubService/GetPresignedUploadURL',
-            file__service__pb2.FileServiceTaskRequest.SerializeToString,
-            file__service__pb2.FileServiceAcknowledgement.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+                              target,
+                              options=(),
+                              channel_credentials=None,
+                              call_credentials=None,
+                              insecure=False,
+                              compression=None,
+                              wait_for_ready=None,
+                              timeout=None,
+                              metadata=None):
+        return grpc.experimental.unary_unary(request, target,
+                                             '/file_service.PresignedURLSubService/GetPresignedUploadURL',
+                                             file__service__pb2.FileServiceTaskRequest.SerializeToString,
+                                             file__service__pb2.FileServiceAcknowledgement.FromString,
+                                             options, channel_credentials,
+                                             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
     def GetPresignedDownloadURL(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/file_service.PresignedURLSubService/GetPresignedDownloadURL',
-            file__service__pb2.FileServiceTaskRequest.SerializeToString,
-            file__service__pb2.FileServiceAcknowledgement.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+                                target,
+                                options=(),
+                                channel_credentials=None,
+                                call_credentials=None,
+                                insecure=False,
+                                compression=None,
+                                wait_for_ready=None,
+                                timeout=None,
+                                metadata=None):
+        return grpc.experimental.unary_unary(request, target,
+                                             '/file_service.PresignedURLSubService/GetPresignedDownloadURL',
+                                             file__service__pb2.FileServiceTaskRequest.SerializeToString,
+                                             file__service__pb2.FileServiceAcknowledgement.FromString,
+                                             options, channel_credentials,
+                                             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
 
 class FileEmbeddingSubServiceStub(object):
@@ -109,25 +111,25 @@ class FileEmbeddingSubServiceStub(object):
             channel: A grpc.Channel.
         """
         self.RegisterFile = channel.unary_unary(
-                '/file_service.FileEmbeddingSubService/RegisterFile',
-                request_serializer=file__service__pb2.FileServiceTaskRequest.SerializeToString,
-                response_deserializer=file__service__pb2.FileServiceAcknowledgement.FromString,
-                )
+            '/file_service.FileEmbeddingSubService/RegisterFile',
+            request_serializer=file__service__pb2.FileServiceTaskRequest.SerializeToString,
+            response_deserializer=file__service__pb2.FileServiceAcknowledgement.FromString,
+        )
         self.GetFilesInfo = channel.unary_unary(
-                '/file_service.FileEmbeddingSubService/GetFilesInfo',
-                request_serializer=file__service__pb2.FileServiceTaskRequest.SerializeToString,
-                response_deserializer=file__service__pb2.FileServiceAcknowledgement.FromString,
-                )
+            '/file_service.FileEmbeddingSubService/GetFilesInfo',
+            request_serializer=file__service__pb2.FileServiceTaskRequest.SerializeToString,
+            response_deserializer=file__service__pb2.FileServiceAcknowledgement.FromString,
+        )
         self.ProcessFile = channel.unary_unary(
-                '/file_service.FileEmbeddingSubService/ProcessFile',
-                request_serializer=file__service__pb2.FileServiceTaskRequest.SerializeToString,
-                response_deserializer=file__service__pb2.FileServiceAcknowledgement.FromString,
-                )
+            '/file_service.FileEmbeddingSubService/ProcessFile',
+            request_serializer=file__service__pb2.FileServiceTaskRequest.SerializeToString,
+            response_deserializer=file__service__pb2.FileServiceAcknowledgement.FromString,
+        )
         self.RetrieveNearestNParagraphs = channel.unary_unary(
-                '/file_service.FileEmbeddingSubService/RetrieveNearestNParagraphs',
-                request_serializer=file__service__pb2.FileServiceTaskRequest.SerializeToString,
-                response_deserializer=file__service__pb2.FileServiceAcknowledgement.FromString,
-                )
+            '/file_service.FileEmbeddingSubService/RetrieveNearestNParagraphs',
+            request_serializer=file__service__pb2.FileServiceTaskRequest.SerializeToString,
+            response_deserializer=file__service__pb2.FileServiceAcknowledgement.FromString,
+        )
 
 
 class FileEmbeddingSubServiceServicer(object):
@@ -160,100 +162,101 @@ class FileEmbeddingSubServiceServicer(object):
 
 def add_FileEmbeddingSubServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'RegisterFile': grpc.unary_unary_rpc_method_handler(
-                    servicer.RegisterFile,
-                    request_deserializer=file__service__pb2.FileServiceTaskRequest.FromString,
-                    response_serializer=file__service__pb2.FileServiceAcknowledgement.SerializeToString,
-            ),
-            'GetFilesInfo': grpc.unary_unary_rpc_method_handler(
-                    servicer.GetFilesInfo,
-                    request_deserializer=file__service__pb2.FileServiceTaskRequest.FromString,
-                    response_serializer=file__service__pb2.FileServiceAcknowledgement.SerializeToString,
-            ),
-            'ProcessFile': grpc.unary_unary_rpc_method_handler(
-                    servicer.ProcessFile,
-                    request_deserializer=file__service__pb2.FileServiceTaskRequest.FromString,
-                    response_serializer=file__service__pb2.FileServiceAcknowledgement.SerializeToString,
-            ),
-            'RetrieveNearestNParagraphs': grpc.unary_unary_rpc_method_handler(
-                    servicer.RetrieveNearestNParagraphs,
-                    request_deserializer=file__service__pb2.FileServiceTaskRequest.FromString,
-                    response_serializer=file__service__pb2.FileServiceAcknowledgement.SerializeToString,
-            ),
+        'RegisterFile': grpc.unary_unary_rpc_method_handler(
+            servicer.RegisterFile,
+            request_deserializer=file__service__pb2.FileServiceTaskRequest.FromString,
+            response_serializer=file__service__pb2.FileServiceAcknowledgement.SerializeToString,
+        ),
+        'GetFilesInfo': grpc.unary_unary_rpc_method_handler(
+            servicer.GetFilesInfo,
+            request_deserializer=file__service__pb2.FileServiceTaskRequest.FromString,
+            response_serializer=file__service__pb2.FileServiceAcknowledgement.SerializeToString,
+        ),
+        'ProcessFile': grpc.unary_unary_rpc_method_handler(
+            servicer.ProcessFile,
+            request_deserializer=file__service__pb2.FileServiceTaskRequest.FromString,
+            response_serializer=file__service__pb2.FileServiceAcknowledgement.SerializeToString,
+        ),
+        'RetrieveNearestNParagraphs': grpc.unary_unary_rpc_method_handler(
+            servicer.RetrieveNearestNParagraphs,
+            request_deserializer=file__service__pb2.FileServiceTaskRequest.FromString,
+            response_serializer=file__service__pb2.FileServiceAcknowledgement.SerializeToString,
+        ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'file_service.FileEmbeddingSubService', rpc_method_handlers)
+        'file_service.FileEmbeddingSubService', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
 
 
- # This class is part of an EXPERIMENTAL API.
+# This class is part of an EXPERIMENTAL API.
 class FileEmbeddingSubService(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
     def RegisterFile(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
+                     target,
+                     options=(),
+                     channel_credentials=None,
+                     call_credentials=None,
+                     insecure=False,
+                     compression=None,
+                     wait_for_ready=None,
+                     timeout=None,
+                     metadata=None):
         return grpc.experimental.unary_unary(request, target, '/file_service.FileEmbeddingSubService/RegisterFile',
-            file__service__pb2.FileServiceTaskRequest.SerializeToString,
-            file__service__pb2.FileServiceAcknowledgement.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+                                             file__service__pb2.FileServiceTaskRequest.SerializeToString,
+                                             file__service__pb2.FileServiceAcknowledgement.FromString,
+                                             options, channel_credentials,
+                                             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
     def GetFilesInfo(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
+                     target,
+                     options=(),
+                     channel_credentials=None,
+                     call_credentials=None,
+                     insecure=False,
+                     compression=None,
+                     wait_for_ready=None,
+                     timeout=None,
+                     metadata=None):
         return grpc.experimental.unary_unary(request, target, '/file_service.FileEmbeddingSubService/GetFilesInfo',
-            file__service__pb2.FileServiceTaskRequest.SerializeToString,
-            file__service__pb2.FileServiceAcknowledgement.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+                                             file__service__pb2.FileServiceTaskRequest.SerializeToString,
+                                             file__service__pb2.FileServiceAcknowledgement.FromString,
+                                             options, channel_credentials,
+                                             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
     def ProcessFile(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
+                    target,
+                    options=(),
+                    channel_credentials=None,
+                    call_credentials=None,
+                    insecure=False,
+                    compression=None,
+                    wait_for_ready=None,
+                    timeout=None,
+                    metadata=None):
         return grpc.experimental.unary_unary(request, target, '/file_service.FileEmbeddingSubService/ProcessFile',
-            file__service__pb2.FileServiceTaskRequest.SerializeToString,
-            file__service__pb2.FileServiceAcknowledgement.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+                                             file__service__pb2.FileServiceTaskRequest.SerializeToString,
+                                             file__service__pb2.FileServiceAcknowledgement.FromString,
+                                             options, channel_credentials,
+                                             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
     def RetrieveNearestNParagraphs(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/file_service.FileEmbeddingSubService/RetrieveNearestNParagraphs',
-            file__service__pb2.FileServiceTaskRequest.SerializeToString,
-            file__service__pb2.FileServiceAcknowledgement.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+                                   target,
+                                   options=(),
+                                   channel_credentials=None,
+                                   call_credentials=None,
+                                   insecure=False,
+                                   compression=None,
+                                   wait_for_ready=None,
+                                   timeout=None,
+                                   metadata=None):
+        return grpc.experimental.unary_unary(request, target,
+                                             '/file_service.FileEmbeddingSubService/RetrieveNearestNParagraphs',
+                                             file__service__pb2.FileServiceTaskRequest.SerializeToString,
+                                             file__service__pb2.FileServiceAcknowledgement.FromString,
+                                             options, channel_credentials,
+                                             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

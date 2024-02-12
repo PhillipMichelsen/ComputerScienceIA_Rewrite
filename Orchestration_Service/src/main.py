@@ -1,7 +1,8 @@
-from concurrent import futures
-import yaml
 import logging
+from concurrent import futures
+
 import grpc
+import yaml
 
 from src.api.job_sub_service import JobSubService
 from src.api.task_sub_service import TaskSubService
