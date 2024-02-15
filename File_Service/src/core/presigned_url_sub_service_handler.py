@@ -4,7 +4,7 @@ from uuid import uuid4
 from src.utils.dependency_manager import DependencyManager
 from src.utils.minio_client import MinioClient
 from src.utils.orchestration_service_client import OrchestrationServiceClient
-from src.utils.redis_client import WorkerRedisClient
+from src.repositories.redis_client import WorkerRedisClient
 
 
 def get_presigned_upload_url(task_id: str, job_id: str, dependency_manager: DependencyManager):

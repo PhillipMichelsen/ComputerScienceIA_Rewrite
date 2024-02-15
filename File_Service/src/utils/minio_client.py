@@ -1,4 +1,5 @@
 import minio
+from minio.notificationconfig import NotificationConfig, QueueConfig
 
 
 class MinioClient:
@@ -13,15 +14,23 @@ class MinioClient:
         if not self.minio.bucket_exists("test"):
             self.minio.make_bucket("test")
 
+        self.minio.set_bucket_notification(
+            "test",
+            NotificationConfig(
+                queue_config_list=[
+                    QueueConfig(
+                        queue="arn:minio:sqs::_:webhook",
+                        events=["s3:ObjectCreated:*"]
+                    )
+                ]
+            )
+        )
+
     def get_presigned_upload_url(self, uuid: str, bucket_name: str, file_name: str) -> str:
         presigned_url = self.minio.get_presigned_url(
             method="PUT",
             bucket_name=bucket_name,
             object_name=f"{uuid}.{file_name}",
-            response_headers={
-                "x-amz-meta-original-filename": file_name,
-                "x-amz-meta-uuid": uuid
-            }
         )
 
         return presigned_url

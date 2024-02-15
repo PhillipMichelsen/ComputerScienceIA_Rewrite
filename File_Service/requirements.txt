@@ -2,3 +2,7 @@ minio
 redis
 grpcio
 protobuf
+sqlalchemy
+psycopg2-binary
+weaviate-client
+requests

@@ -15,7 +15,7 @@ services:
     build: ./Orchestration_Service
     container_name: orchestration-service
     ports:
-      - "50051:50051"
+      - "55000:55000"
     depends_on:
       - redis
 
@@ -23,11 +23,13 @@ services:
     build: ./File_Service
     container_name: file-service
     ports:
-      - "50052:50052"
+      - "55001:55001"
     depends_on:
       - redis
       - minio
       - orchestration-service
+      - weaviate
+      - postgres
 
   redis:
     image: redis
@@ -38,7 +40,49 @@ services:
   minio:
     image: minio/minio
     container_name: minio-service
-    command: server --console-address ":9001" --address ":9000" /data
     ports:
       - "9000:9000"
       - "9001:9001"
+    environment:
+      MINIO_NOTIFY_WEBHOOK_ENABLE: 'on'
+      MINIO_NOTIFY_WEBHOOK_ENDPOINT: "http://api-gateway:8000/minio_notification"
+    command: server --console-address ":9001" --address ":9000" /data
+
+
+  postgres:
+    image: postgres
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: computer_science_ia
+
+  weaviate:
+    image: semitechnologies/weaviate:1.23.8
+    container_name: weaviate
+    ports:
+      - "8080:8080"
+      - "50051:50051"
+    environment:
+      QUERY_DEFAULTS_LIMIT: 20
+      AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: 'true'
+      PERSISTENCE_DATA_PATH: "./data"
+      DEFAULT_VECTORIZER_MODULE: text2vec-transformers
+      ENABLE_MODULES: text2vec-transformers
+      TRANSFORMERS_INFERENCE_API: http://t2v-transformers:8080
+      CLUSTER_HOSTNAME: 'node1'
+
+  t2v-transformers:
+    image: semitechnologies/transformers-inference:sentence-transformers-multi-qa-MiniLM-L6-cos-v1
+    container_name: t2v-transformers
+    environment:
+      ENABLE_CUDA: 0
+
+  grobid:
+    image: lfoppiano/grobid:0.8.0
+    container_name: grobid
+    ports:
+      - "8070:8070"
+      - "8071:8071"

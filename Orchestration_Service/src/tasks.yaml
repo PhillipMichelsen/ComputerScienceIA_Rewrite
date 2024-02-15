@@ -1,2 +1,6 @@
 GetPresignedUploadURL:
   signature: "FileService.PresignedURLSubService.GetPresignedUploadURL"
+RegisterFile:
+  signature: "FileService.FileEmbeddingSubService.RegisterFile"
+ProcessFile:
+  signature: "FileService.FileEmbeddingSubService.ProcessFile"

@@ -1,2 +1,4 @@
 GetPresignedUploadURL:
   - GetPresignedUploadURL
+FileUploaded:
+  - RegisterFile

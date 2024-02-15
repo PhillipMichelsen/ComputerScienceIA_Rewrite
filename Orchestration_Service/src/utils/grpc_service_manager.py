@@ -6,7 +6,7 @@ from src.generated import file_service_pb2, file_service_pb2_grpc
 class GrpcServiceManager:
     def __init__(self):
         self.channels = {
-            'FileService': grpc.insecure_channel('file-service:50052'),
+            'FileService': grpc.insecure_channel('file-service:55001'),
         }
 
         self.service_info = {

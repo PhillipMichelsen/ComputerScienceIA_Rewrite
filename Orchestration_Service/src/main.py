@@ -24,9 +24,9 @@ def serve(dependency_manager_instance: DependencyManager):
         server
     )
 
-    server.add_insecure_port('[::]:50051')
+    server.add_insecure_port('[::]:55000')
     server.start()
-    logging.info('----- Server started on port 50051 -----')
+    logging.info('----- Server started on port 55000 -----')
 
     server.wait_for_termination()
 

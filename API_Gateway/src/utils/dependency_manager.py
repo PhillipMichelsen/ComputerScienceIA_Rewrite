@@ -23,7 +23,7 @@ dependency_manager.add_dependency('worker_redis_client', WorkerRedisClient(db=1)
 
 dependency_manager.add_dependency(
     'orchestration_service_client',
-    OrchestrationServiceClient("orchestration-service:50051")
+    OrchestrationServiceClient("orchestration-service:55000")
 )
 
 dependency_manager.add_dependency('pubsub_listener',
