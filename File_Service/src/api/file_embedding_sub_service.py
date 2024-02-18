@@ -3,7 +3,8 @@ import threading
 
 import grpc
 
-from src.core.file_embedding_sub_service_handler import register_file, get_files_info, process_file, retrieve_nearest_n_paragraphs
+from src.core.file_embedding_sub_service_handler import register_file, get_files_info, process_file, \
+    retrieve_nearest_n_paragraphs
 from src.generated import file_service_pb2, file_service_pb2_grpc
 from src.utils.dependency_manager import DependencyManager
 

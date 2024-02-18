@@ -1,7 +1,8 @@
 import logging
-import requests
 from io import BytesIO
 from xml.etree import ElementTree
+
+import requests
 
 
 class GrobidClient:

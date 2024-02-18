@@ -30,6 +30,15 @@ services:
       - orchestration-service
       - weaviate
       - postgres
+  
+  ai-service:
+    build: ./AI_Service
+    container_name: ai-service
+    ports:
+      - "55002:55002"
+    depends_on:
+      - redis
+      - orchestration-service
 
   redis:
     image: redis

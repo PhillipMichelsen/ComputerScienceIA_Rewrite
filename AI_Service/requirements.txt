@@ -1,0 +1,5 @@
+grpcio
+protobuf
+redis
+openai
+python-dotenv

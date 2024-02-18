@@ -7,9 +7,12 @@ from src.generated.orchestration_service_pb2 import (
     AddTaskToJobRequest,
     NotifyJobRequest,
     TaskCompletedRequest,
-    TaskErrorRequest
+    TaskErrorRequest,
 )
-from src.generated.orchestration_service_pb2_grpc import JobSubServiceStub, TaskSubServiceStub
+from src.generated.orchestration_service_pb2_grpc import (
+    JobSubServiceStub,
+    TaskSubServiceStub,
+)
 
 
 class OrchestrationServiceClient:
@@ -18,15 +21,20 @@ class OrchestrationServiceClient:
         self.job_stub = JobSubServiceStub(self.channel)
         self.task_stub = TaskSubServiceStub(self.channel)
 
-    def create_job(self, job_name, service_id, request_id, initial_job_data):
-        request = CreateJobRequest(job_name=job_name, service_id=service_id, request_id=request_id,
-                                   initial_job_data=initial_job_data)
-        logging.debug(f"Sending create job request, job: {job_name}, request_id: {request_id}")
+    def create_job(self, job_name, request_id, initial_job_data):
+        request = CreateJobRequest(
+            job_name=job_name, request_id=request_id, initial_job_data=initial_job_data
+        )
+        logging.debug(
+            f"Sending create job request, job: {job_name}, request_id: {request_id}"
+        )
         return self.job_stub.CreateJob(request)
 
     def add_task_to_job(self, job_id: str, task_name: str):
         request = AddTaskToJobRequest(job_id=job_id, task_name=task_name)
-        logging.debug(f"Sending add task to job request, job_id: {job_id}, task_name: {task_name}")
+        logging.debug(
+            f"Sending add task to job request, job_id: {job_id}, task_name: {task_name}"
+        )
         return self.job_stub.AddTaskToJob(request)
 
     def notify_job(self, task_id: str, notification: dict):
@@ -41,5 +49,7 @@ class OrchestrationServiceClient:
 
     def task_error(self, task_id: str, error_message: str):
         request = TaskErrorRequest(task_id=task_id, error_message=error_message)
-        logging.debug(f"Sending task error request, task_id: {task_id}, error_message: {error_message}")
+        logging.debug(
+            f"Sending task error request, task_id: {task_id}, error_message: {error_message}"
+        )
         return self.task_stub.TaskError(request)

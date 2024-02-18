@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package ai_service;
+
+service LLMAgentSubService {
+    rpc InvokeAgent(AIServiceTaskRequest) returns (AIServiceAcknowledgement) {}
+}
+
+
+message AIServiceTaskRequest {
+    string task_id = 1;
+    string job_id = 2;
+}
+
+message AIServiceAcknowledgement {
+    bool success = 1;
+}

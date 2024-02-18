@@ -1,7 +1,8 @@
+import logging
+
 from src.utils.dependency_manager import DependencyManager
 from src.utils.grpc_service_manager import GrpcServiceManager
 from src.utils.redis_client import ManagerRedisClient, WorkerRedisClient
-import logging
 
 
 def dispatch_task(task_id: str, job_id: str, dependency_manager: DependencyManager):

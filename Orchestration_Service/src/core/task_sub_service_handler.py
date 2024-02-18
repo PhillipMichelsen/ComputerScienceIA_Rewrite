@@ -1,9 +1,9 @@
 import logging
 
+from src.core.task_manager import dispatch_task, terminate_job
 from src.utils.dependency_manager import DependencyManager
 from src.utils.grpc_service_manager import GrpcServiceManager
 from src.utils.redis_client import ManagerRedisClient, WorkerRedisClient
-from src.core.task_manager import dispatch_task, terminate_job
 
 
 def task_completed(task_id: str, dependency_manager: DependencyManager):

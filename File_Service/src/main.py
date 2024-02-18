@@ -3,16 +3,16 @@ from concurrent import futures
 
 import grpc
 
-from src.api.presigned_url_sub_service import PresignedURLSubService
 from src.api.file_embedding_sub_service import FileEmbeddingSubService
+from src.api.presigned_url_sub_service import PresignedURLSubService
 from src.generated import file_service_pb2_grpc
-from src.utils.dependency_manager import DependencyManager
-from src.utils.minio_client import MinioClient
-from src.utils.orchestration_service_client import OrchestrationServiceClient
-from src.utils.grobid_client import GrobidClient
+from src.repositories.file_repository import FileRepository
 from src.repositories.redis_client import WorkerRedisClient
 from src.repositories.weaviate_client import WeaviateClient
-from src.repositories.file_repository import FileRepository
+from src.utils.dependency_manager import DependencyManager
+from src.utils.grobid_client import GrobidClient
+from src.utils.minio_client import MinioClient
+from src.utils.orchestration_service_client import OrchestrationServiceClient
 
 
 def serve(dependency_manager_instance: DependencyManager):

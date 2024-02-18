@@ -1,7 +1,9 @@
+from uuid import uuid4
+
 from src.utils.orchestration_service_client import OrchestrationServiceClient
 from src.utils.pubsub_listener import RedisPubSubListener
 from src.utils.redis_client import WorkerRedisClient
-from uuid import uuid4
+
 
 class DependencyManager:
     def __init__(self):
@@ -32,6 +34,7 @@ dependency_manager.add_dependency('pubsub_listener',
                                       dependency_manager.get_dependency('service_id')
                                   )
                                   )
+
+
 def get_dependency_manager():
     return dependency_manager
-

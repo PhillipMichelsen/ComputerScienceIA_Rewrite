@@ -4,3 +4,8 @@ RegisterFile:
   signature: "FileService.FileEmbeddingSubService.RegisterFile"
 ProcessFile:
   signature: "FileService.FileEmbeddingSubService.ProcessFile"
+RetrieveNearestNParagraphs:
+  signature: "FileService.FileEmbeddingSubService.RetrieveNearestNParagraphs"
+InvokeAgent:
+  signature: "AIService.LLMAgentSubService.InvokeAgent"
+

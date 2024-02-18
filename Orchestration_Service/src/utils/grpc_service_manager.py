@@ -1,5 +1,6 @@
 import grpc
 
+from src.generated import ai_service_pb2, ai_service_pb2_grpc
 from src.generated import file_service_pb2, file_service_pb2_grpc
 
 
@@ -7,6 +8,7 @@ class GrpcServiceManager:
     def __init__(self):
         self.channels = {
             'FileService': grpc.insecure_channel('file-service:55001'),
+            'AIService': grpc.insecure_channel('ai-service:55002'),
         }
 
         self.service_info = {
@@ -16,6 +18,12 @@ class GrpcServiceManager:
                     'FileEmbeddingSubService': file_service_pb2_grpc.FileEmbeddingSubServiceStub,
                 },
                 'request_class': file_service_pb2.FileServiceTaskRequest,
+            },
+            'AIService': {
+                'stub_classes': {
+                    'LLMAgentSubService': ai_service_pb2_grpc.LLMAgentSubServiceStub,
+                },
+                'request_class': ai_service_pb2.AIServiceTaskRequest,
             },
         }
 

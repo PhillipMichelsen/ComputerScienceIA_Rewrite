@@ -2,3 +2,5 @@ GetPresignedUploadURL:
   - GetPresignedUploadURL
 FileUploaded:
   - RegisterFile
+TestLLMAgentInvoke:
+  - InvokeAgent

@@ -1,13 +1,14 @@
 import logging
 from uuid import uuid4
 
+from src.core.task_manager import dispatch_task
 from src.utils.dependency_manager import DependencyManager
 from src.utils.grpc_service_manager import GrpcServiceManager
 from src.utils.redis_client import ManagerRedisClient, WorkerRedisClient
-from src.core.task_manager import dispatch_task
 
 
-def create_job(job_name: str, service_id: str, request_id: str, initial_job_data: dict, dependency_manager: DependencyManager):
+def create_job(job_name: str, service_id: str, request_id: str, initial_job_data: dict,
+               dependency_manager: DependencyManager):
     manager_redis_client: ManagerRedisClient = dependency_manager.get_dependency('manager_redis_client')
     worker_redis_client: WorkerRedisClient = dependency_manager.get_dependency('worker_redis_client')
     grpc_service_manager: GrpcServiceManager = dependency_manager.get_dependency('grpc_service_manager')
