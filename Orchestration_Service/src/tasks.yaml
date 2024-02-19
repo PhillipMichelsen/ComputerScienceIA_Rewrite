@@ -6,6 +6,12 @@ ProcessFile:
   signature: "FileService.FileEmbeddingSubService.ProcessFile"
 RetrieveNearestNParagraphs:
   signature: "FileService.FileEmbeddingSubService.RetrieveNearestNParagraphs"
-InvokeAgent:
-  signature: "AIService.LLMAgentSubService.InvokeAgent"
+InvokeInterpreterAgent:
+  signature: "AIService.LLMAgentSubService.InvokeInterpreterAgent"
+InvokeRetrievalAgent:
+  signature: "AIService.LLMAgentSubService.InvokeRetrievalAgent"
+InvokeSummarizationAgent:
+    signature: "AIService.LLMAgentSubService.InvokeSummarizationAgent"
+InvokeResponseAgent:
+  signature: "AIService.LLMAgentSubService.InvokeResponseAgent"
 

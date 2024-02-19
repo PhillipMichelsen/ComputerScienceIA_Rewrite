@@ -3,4 +3,4 @@ GetPresignedUploadURL:
 FileUploaded:
   - RegisterFile
 TestLLMAgentInvoke:
-  - InvokeAgent
+  - InvokeInterpreterAgent

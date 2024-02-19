@@ -96,33 +96,29 @@ def retrieve_nearest_n_paragraphs(
         "file_repository"
     )
 
-    search_concepts, move_towards_concepts, move_away_from_concepts = (
+    search_concepts, move_towards_concepts, move_away_concepts = (
         worker_redis_client.get_job_data(
             job_id,
-            ["search_concepts", "move_towards_concepts", "move_away_from_concepts"],
+            ["search_concepts", "move_towards_concepts", "move_away_concepts"],
         )
     )
-
-    logging.debug(f"Retrieved search concepts: {search_concepts}")
-    logging.debug(f"Retrieved move towards concepts: {move_towards_concepts}")
-    logging.debug(f"Retrieved move away from concepts: {move_away_from_concepts}")
-
-    if not move_towards_concepts:
-        move_towards_concepts = ""
-    if not move_away_from_concepts:
-        move_away_from_concepts = ""
 
     similar_paragraphs = weaviate_client.search_similar_paragraphs(
         query_concepts=search_concepts.split("::"),
         move_towards_concepts=move_towards_concepts.split("::"),
-        move_away_concepts=move_away_from_concepts.split("::"),
+        move_away_concepts=move_away_concepts.split("::"),
     )
     logging.debug(f"Retrieved similar paragraphs: {similar_paragraphs}")
     worker_redis_client.set_job_data_field(
         job_id, "similar_paragraphs", "::".join(similar_paragraphs)
     )
     orchestration_service_client.notify_job(
-        task_id, {"type": "NOTIFY", "message": "Retrieved similar paragraphs."}
+        task_id,
+        {
+            "type": "NOTIFICATION",
+            "step": "RETRIEVAL",
+            "status": "COMPLETED",
+        },
     )
 
     orchestration_service_client.task_completed(task_id)

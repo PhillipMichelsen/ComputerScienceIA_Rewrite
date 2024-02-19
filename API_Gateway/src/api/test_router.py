@@ -40,7 +40,6 @@ def test_endpoint(
             service_id=service_id,
             request_id=request_id,
             initial_job_data={
-                "agent_type": "InterpreterAgent",
                 "user_input": user_input,
             },
         )

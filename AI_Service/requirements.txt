@@ -2,4 +2,5 @@ grpcio
 protobuf
 redis
 openai
+google-generativeai
 python-dotenv

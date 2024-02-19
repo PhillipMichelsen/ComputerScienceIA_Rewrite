@@ -9,6 +9,7 @@ from src.api.llm_agent_sub_service import LLMAgentSubService
 from src.generated import ai_service_pb2_grpc
 from src.repositories.redis_client import WorkerRedisClient
 from src.utils.dependency_manager import DependencyManager
+from src.utils.llm_client import GoogleAILLMClient
 from src.utils.orchestration_service_client import OrchestrationServiceClient
 
 
@@ -28,9 +29,6 @@ def serve(dependency_manager_instance: DependencyManager):
 
 if __name__ == "__main__":
     dotenv.load_dotenv()
-    openai_api_key = os.getenv("OPENAI_API_KEY")
-    if openai_api_key is None:
-        raise ValueError("OPENAI_API_KEY environment variable must be set")
 
     logging.basicConfig(
         level=logging.INFO, format="%(asctime)s | %(levelname)s | %(message)s"
@@ -41,6 +39,9 @@ if __name__ == "__main__":
     dependency_manager.add_dependency(
         "orchestration_service_client",
         OrchestrationServiceClient("orchestration-service:55000"),
+    )
+    dependency_manager.add_dependency(
+        "llm_client", GoogleAILLMClient(os.getenv("GOOGLE_API_KEY"))
     )
 
     serve(dependency_manager)

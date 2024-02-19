@@ -1,4 +1,5 @@
 import json
+import logging
 from abc import ABC, abstractmethod
 
 import google.generativeai as genai
@@ -8,7 +9,7 @@ import openai
 class LLMClient(ABC):
     @abstractmethod
     def create_completion_json(
-        self, model: str, prompt: str, input_message: str, return_fields: list
+        self, model: str, prompt: str, input_message: str, return_fields: tuple
     ) -> dict:
         pass
 
@@ -33,6 +34,7 @@ class OpenAILLMClient(LLMClient):
         )
         response = llm_response.choices[0].message.content
         response = json.loads(response)
+        print(response, flush=True)
 
         result = {}
         for field, expected_type in return_fields:
@@ -58,11 +60,10 @@ class GoogleAILLMClient(LLMClient):
     ) -> dict:
         model = genai.GenerativeModel(model)
 
-        response = model.generate_content(
-            f"{prompt} \n\n###\nINPUT:\n{input_message}\n\nOUTPUT:\n"
-        )
+        response = model.generate_content(f"{prompt} \n\nINPUT:{input_message}\nJSON:")
+        logging.info(response.parts)
+        logging.info(response.text)
         response = json.loads(response.text)
-        print(response)
         result = {}
         for field, expected_type in return_fields:
             if field in response:

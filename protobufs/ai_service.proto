@@ -3,7 +3,10 @@ syntax = "proto3";
 package ai_service;
 
 service LLMAgentSubService {
-    rpc InvokeAgent(AIServiceTaskRequest) returns (AIServiceAcknowledgement) {}
+    rpc InvokeInterpreterAgent(AIServiceTaskRequest) returns (AIServiceAcknowledgement) {}
+    rpc InvokeRetrievalAgent(AIServiceTaskRequest) returns (AIServiceAcknowledgement) {}
+    rpc InvokeSummarizationAgent(AIServiceTaskRequest) returns (AIServiceAcknowledgement) {}
+    rpc InvokeResponseAgent(AIServiceTaskRequest) returns (AIServiceAcknowledgement) {}
 }
 
 

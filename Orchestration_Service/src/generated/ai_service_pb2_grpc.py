@@ -14,8 +14,23 @@ class LLMAgentSubServiceStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.InvokeAgent = channel.unary_unary(
-            '/ai_service.LLMAgentSubService/InvokeAgent',
+        self.InvokeInterpreterAgent = channel.unary_unary(
+            "/ai_service.LLMAgentSubService/InvokeInterpreterAgent",
+            request_serializer=ai__service__pb2.AIServiceTaskRequest.SerializeToString,
+            response_deserializer=ai__service__pb2.AIServiceAcknowledgement.FromString,
+        )
+        self.InvokeRetrievalAgent = channel.unary_unary(
+            "/ai_service.LLMAgentSubService/InvokeRetrievalAgent",
+            request_serializer=ai__service__pb2.AIServiceTaskRequest.SerializeToString,
+            response_deserializer=ai__service__pb2.AIServiceAcknowledgement.FromString,
+        )
+        self.InvokeSummarizationAgent = channel.unary_unary(
+            "/ai_service.LLMAgentSubService/InvokeSummarizationAgent",
+            request_serializer=ai__service__pb2.AIServiceTaskRequest.SerializeToString,
+            response_deserializer=ai__service__pb2.AIServiceAcknowledgement.FromString,
+        )
+        self.InvokeResponseAgent = channel.unary_unary(
+            "/ai_service.LLMAgentSubService/InvokeResponseAgent",
             request_serializer=ai__service__pb2.AIServiceTaskRequest.SerializeToString,
             response_deserializer=ai__service__pb2.AIServiceAcknowledgement.FromString,
         )
@@ -24,23 +39,57 @@ class LLMAgentSubServiceStub(object):
 class LLMAgentSubServiceServicer(object):
     """Missing associated documentation comment in .proto file."""
 
-    def InvokeAgent(self, request, context):
+    def InvokeInterpreterAgent(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
+        context.set_details("Method not implemented!")
+        raise NotImplementedError("Method not implemented!")
+
+    def InvokeRetrievalAgent(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details("Method not implemented!")
+        raise NotImplementedError("Method not implemented!")
+
+    def InvokeSummarizationAgent(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details("Method not implemented!")
+        raise NotImplementedError("Method not implemented!")
+
+    def InvokeResponseAgent(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details("Method not implemented!")
+        raise NotImplementedError("Method not implemented!")
 
 
 def add_LLMAgentSubServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
-        'InvokeAgent': grpc.unary_unary_rpc_method_handler(
-            servicer.InvokeAgent,
+        "InvokeInterpreterAgent": grpc.unary_unary_rpc_method_handler(
+            servicer.InvokeInterpreterAgent,
+            request_deserializer=ai__service__pb2.AIServiceTaskRequest.FromString,
+            response_serializer=ai__service__pb2.AIServiceAcknowledgement.SerializeToString,
+        ),
+        "InvokeRetrievalAgent": grpc.unary_unary_rpc_method_handler(
+            servicer.InvokeRetrievalAgent,
+            request_deserializer=ai__service__pb2.AIServiceTaskRequest.FromString,
+            response_serializer=ai__service__pb2.AIServiceAcknowledgement.SerializeToString,
+        ),
+        "InvokeSummarizationAgent": grpc.unary_unary_rpc_method_handler(
+            servicer.InvokeSummarizationAgent,
+            request_deserializer=ai__service__pb2.AIServiceTaskRequest.FromString,
+            response_serializer=ai__service__pb2.AIServiceAcknowledgement.SerializeToString,
+        ),
+        "InvokeResponseAgent": grpc.unary_unary_rpc_method_handler(
+            servicer.InvokeResponseAgent,
             request_deserializer=ai__service__pb2.AIServiceTaskRequest.FromString,
             response_serializer=ai__service__pb2.AIServiceAcknowledgement.SerializeToString,
         ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-        'ai_service.LLMAgentSubService', rpc_method_handlers)
+        "ai_service.LLMAgentSubService", rpc_method_handlers
+    )
     server.add_generic_rpc_handlers((generic_handler,))
 
 
@@ -49,18 +98,117 @@ class LLMAgentSubService(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
-    def InvokeAgent(request,
-                    target,
-                    options=(),
-                    channel_credentials=None,
-                    call_credentials=None,
-                    insecure=False,
-                    compression=None,
-                    wait_for_ready=None,
-                    timeout=None,
-                    metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/ai_service.LLMAgentSubService/InvokeAgent',
-                                             ai__service__pb2.AIServiceTaskRequest.SerializeToString,
-                                             ai__service__pb2.AIServiceAcknowledgement.FromString,
-                                             options, channel_credentials,
-                                             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+    def InvokeInterpreterAgent(
+        request,
+        target,
+        options=(),
+        channel_credentials=None,
+        call_credentials=None,
+        insecure=False,
+        compression=None,
+        wait_for_ready=None,
+        timeout=None,
+        metadata=None,
+    ):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            "/ai_service.LLMAgentSubService/InvokeInterpreterAgent",
+            ai__service__pb2.AIServiceTaskRequest.SerializeToString,
+            ai__service__pb2.AIServiceAcknowledgement.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+        )
+
+    @staticmethod
+    def InvokeRetrievalAgent(
+        request,
+        target,
+        options=(),
+        channel_credentials=None,
+        call_credentials=None,
+        insecure=False,
+        compression=None,
+        wait_for_ready=None,
+        timeout=None,
+        metadata=None,
+    ):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            "/ai_service.LLMAgentSubService/InvokeRetrievalAgent",
+            ai__service__pb2.AIServiceTaskRequest.SerializeToString,
+            ai__service__pb2.AIServiceAcknowledgement.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+        )
+
+    @staticmethod
+    def InvokeSummarizationAgent(
+        request,
+        target,
+        options=(),
+        channel_credentials=None,
+        call_credentials=None,
+        insecure=False,
+        compression=None,
+        wait_for_ready=None,
+        timeout=None,
+        metadata=None,
+    ):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            "/ai_service.LLMAgentSubService/InvokeSummarizationAgent",
+            ai__service__pb2.AIServiceTaskRequest.SerializeToString,
+            ai__service__pb2.AIServiceAcknowledgement.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+        )
+
+    @staticmethod
+    def InvokeResponseAgent(
+        request,
+        target,
+        options=(),
+        channel_credentials=None,
+        call_credentials=None,
+        insecure=False,
+        compression=None,
+        wait_for_ready=None,
+        timeout=None,
+        metadata=None,
+    ):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            "/ai_service.LLMAgentSubService/InvokeResponseAgent",
+            ai__service__pb2.AIServiceTaskRequest.SerializeToString,
+            ai__service__pb2.AIServiceAcknowledgement.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+        )
