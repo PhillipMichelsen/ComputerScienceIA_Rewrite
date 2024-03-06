@@ -17,7 +17,9 @@ def invoke_response_agent(
     )
     llm_client: LLMClient = dependency_manager.get_dependency("llm_client")
 
-    orchestration_service_client.notify_job(task_id, {"type": "NOTIFICATION", "step": "RESPONSE", "status": "IN_PROGRESS"})
+    orchestration_service_client.notify_job(
+        task_id, {"type": "NOTIFICATION", "step": "RESPONSE", "status": "IN_PROGRESS"}
+    )
 
     summary, user_goal, user_query = worker_redis_client.get_job_data(
         job_id, ["summary", "user_goal", "user_input"]
@@ -39,9 +41,9 @@ def invoke_response_agent(
     )
 
     orchestration_service_client.notify_job(
-        task_id, {"type": "RESPONSE_GENERATED", "message": "Response generated!"}
+        task_id, {"type": "NOTIFICATION", "step": "RESPONSE", "status": "COMPLETED"}
     )
     orchestration_service_client.notify_job(
         task_id, {"type": "RETURN", "response": response["response"]}
     )
-    # orchestration_service_client.task_completed(task_id)
+    orchestration_service_client.task_completed(task_id)

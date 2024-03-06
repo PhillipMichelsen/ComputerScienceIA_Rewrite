@@ -1,3 +1,4 @@
+import json
 import logging
 from io import BytesIO
 
@@ -39,8 +40,36 @@ def register_file(task_id: str, job_id: str, dependency_manager: DependencyManag
     orchestration_service_client.task_completed(task_id)
 
 
-def get_files_info():
-    raise NotImplementedError
+def get_files_info(task_id: str, job_id: str, dependency_manager: DependencyManager):
+    orchestration_service_client: OrchestrationServiceClient = (
+        dependency_manager.get_dependency("orchestration_service_client")
+    )
+    file_repository: FileRepository = dependency_manager.get_dependency(
+        "file_repository"
+    )
+
+    files = file_repository.get_all_files()
+    files_info = [
+        {
+            "file_name": file.file_name,
+            "uuid": file.uuid,
+            "bucket_name": file.bucket_name,
+            "paragraph_count": file.paragraph_count,
+            "embedded_paragraph_count": file.embedded_paragraph_count,
+            "status": file.status,
+        }
+        for file in files
+    ]
+
+    orchestration_service_client.notify_job(
+        task_id,
+        {
+            "type": "RETURN",
+            "files_info": json.dumps(files_info),
+        },
+    )
+
+    orchestration_service_client.task_completed(task_id)
 
 
 def process_file(task_id: str, job_id: str, dependency_manager: DependencyManager):

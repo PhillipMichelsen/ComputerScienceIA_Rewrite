@@ -19,7 +19,13 @@ def invoke_retrieval_agent(
     llm_client: LLMClient = dependency_manager.get_dependency("llm_client")
 
     orchestration_service_client.notify_job(
-        task_id, {"type": "NOTIFICATION", "step": "RETRIEVAL", "status": "IN_PROGRESS_FORMING_REQUEST"}
+        task_id,
+        {
+            "type": "NOTIFICATION",
+            "step": "RETRIEVAL",
+            "status": "IN_PROGRESS",
+            "detail": "Retrieval agent invoked.",
+        },
     )
 
     user_goal, retrieval_goals = worker_redis_client.get_job_data(
@@ -56,6 +62,12 @@ def invoke_retrieval_agent(
     orchestration_service_client.add_task_to_job(job_id, "InvokeSummarizationAgent")
 
     orchestration_service_client.notify_job(
-        task_id, {"type": "NOTIFICATION", "step": "RETRIEVAL", "status": "IN_PROGRESS_FORMED_REQUEST", "detail": f"Search concepts: {response['search_concepts']}"}
+        task_id,
+        {
+            "type": "NOTIFICATION",
+            "step": "RETRIEVAL",
+            "status": "IN_PROGRESS",
+            "detail": f"Search concepts: {response['search_concepts']}",
+        },
     )
     orchestration_service_client.task_completed(task_id)

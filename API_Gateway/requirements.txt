@@ -1,5 +1,6 @@
 redis
 fastapi
+websockets
 uvicorn
 grpcio
 protobuf

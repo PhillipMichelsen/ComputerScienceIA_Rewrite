@@ -2,5 +2,7 @@ GetPresignedUploadURL:
   - GetPresignedUploadURL
 FileUploaded:
   - RegisterFile
-TestLLMAgentInvoke:
+GetFilesInfo:
+  - GetFilesInfo
+RespondToQuery:
   - InvokeInterpreterAgent

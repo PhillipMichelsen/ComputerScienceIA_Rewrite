@@ -2,6 +2,8 @@ GetPresignedUploadURL:
   signature: "FileService.PresignedURLSubService.GetPresignedUploadURL"
 RegisterFile:
   signature: "FileService.FileEmbeddingSubService.RegisterFile"
+GetFilesInfo:
+  signature: "FileService.FileEmbeddingSubService.GetFilesInfo"
 ProcessFile:
   signature: "FileService.FileEmbeddingSubService.ProcessFile"
 RetrieveNearestNParagraphs:

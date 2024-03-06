@@ -14,7 +14,15 @@ class FileRepository:
         self.ScopedSession = scoped_session(self.session_factory)
         logging.info("Connected to postgres database, file_repository initialized.")
 
-    def add_file(self, file_name, uuid, bucket_name, paragraph_count, embedded_paragraph_count, status):
+    def add_file(
+        self,
+        file_name,
+        uuid,
+        bucket_name,
+        paragraph_count,
+        embedded_paragraph_count,
+        status,
+    ):
         session = self.ScopedSession()
         try:
             new_file = Files(
@@ -23,7 +31,7 @@ class FileRepository:
                 bucket_name=bucket_name,
                 paragraph_count=paragraph_count,
                 embedded_paragraph_count=embedded_paragraph_count,
-                status=status
+                status=status,
             )
             session.add(new_file)
             session.commit()
@@ -38,11 +46,12 @@ class FileRepository:
         session = self.ScopedSession()
         try:
             session.query(Files).filter(Files.file_name == file_name).update(
-                {Files.embedded_paragraph_count: Files.embedded_paragraph_count + count})
+                {Files.embedded_paragraph_count: Files.embedded_paragraph_count + count}
+            )
 
             session.query(Files).filter(Files.file_name == file_name).filter(
-                Files.embedded_paragraph_count == Files.paragraph_count).update(
-                {Files.status: 'completed'})
+                Files.embedded_paragraph_count == Files.paragraph_count
+            ).update({Files.status: "completed"})
 
             session.commit()
         except Exception as e:
@@ -55,7 +64,8 @@ class FileRepository:
         session = self.ScopedSession()
         try:
             session.query(Files).filter(Files.file_name == file_name).update(
-                {Files.paragraph_count: count})
+                {Files.paragraph_count: count}
+            )
             session.commit()
         except Exception as e:
             session.rollback()
